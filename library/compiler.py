@@ -1,7 +1,9 @@
-from PyQt5.QtWidgets import QApplication
-from library.jsonToQt import mapping
 from json import load
 from sys import argv, exit
+
+from PyQt5.QtWidgets import QApplication
+
+from JsonGuiConstructor.library.jsonToQt import widgets
 
 if __name__ == '__main__':
     with open('../test.json', 'r') as markupFile:
@@ -9,7 +11,7 @@ if __name__ == '__main__':
 
     for w, _ in markup.items():
         try:
-            widget = mapping[w]
+            widget = widgets[w]
         except KeyError:
             pass
 

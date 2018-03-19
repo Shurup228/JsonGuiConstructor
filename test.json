@@ -1,4 +1,13 @@
 {
+  "id": 0,
   "type": "QMainWindow",
-  "layout": "QFormLayout"
+  "layout": "QFormLayout",
+  "childWidgets": [{
+    "id": 1,
+    "type": "QWidget"
+  },
+    {
+      "id": 2,
+      "type": "QMainWidget"
+    }]
 }

@@ -1,0 +1,14 @@
+QMainWindow {
+    id = 0
+    layout = QFormLayout
+    layout.add(1)
+    layout.add(2)
+}
+
+QWidget {
+    id = 1
+}
+
+QMainWidget {
+    id = 2
+}

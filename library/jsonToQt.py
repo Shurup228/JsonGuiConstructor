@@ -1,11 +1,12 @@
 from typing import Dict
 
 from PyQt5.Qt import QObject, QLayout
-from PyQt5.QtWidgets import QFormLayout, QVBoxLayout, QHBoxLayout, QGridLayout
+from PyQt5.QtWidgets import QFormLayout, QVBoxLayout, QHBoxLayout, QGridLayout, QWidget
 from PyQt5.QtWidgets import QMainWindow
 
 widgets: Dict[str, QObject] = {
-    "QMainWindow": QMainWindow
+    "QMainWindow": QMainWindow,
+    "QWidget": QWidget
 }
 
 layouts: Dict[str, QLayout] = {

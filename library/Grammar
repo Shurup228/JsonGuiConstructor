@@ -3,6 +3,7 @@
 # +TERM you can specify TERM in [] - array - to include variable amount of TERMs
 
 WIDGET := {
+    $id := NUMBER
     $type := TYPE
     &layout := LAYOUT
     # you need to specify \/ if ^ specified and visa versa
