@@ -1,0 +1,24 @@
+# $TERM required field
+# &TERM optional field
+# +TERM you can specify TERM in [] - array - to include variable amount of TERMs
+
+WIDGET := {
+    $type := TYPE
+    &layout := LAYOUT
+    # you need to specify \/ if ^ specified and visa versa
+    &childWidgets := +WIDGET
+    TERM := VAR
+}
+
+DICT := {
+    TERM := VAR # any amount
+    }
+
+TYPE := widgetType
+LAYOUT := widgetLayout
+TERM := any string
+VAR := MODIFIER + TERM
+MODIFIER := [
+    "*" := setter function
+    ""  := no modifier
+]

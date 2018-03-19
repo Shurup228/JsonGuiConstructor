@@ -1,5 +1,4 @@
 {
-  "Window" : {
-    "windowTitle": "Nazvaniye okna"
-  }
+  "type": "QMainWindow",
+  "layout": "QFormLayout"
 }
