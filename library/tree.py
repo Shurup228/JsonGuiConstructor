@@ -33,3 +33,8 @@ class Node:
 
     def __call__(self) -> object:
         return self.__root
+
+    @staticmethod
+    def parse_dict(d):
+        ...
+        return Node(d)
