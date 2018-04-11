@@ -1,4 +1,16 @@
 {
-  "type": "QMainWindow",
-  "layout": "QFormLayout"
+  "type": "QWidget",
+  "layout": "QHBoxLayout",
+  "windowTitle": "kek",
+  "fixedSize": [500, 600],
+  "children": [
+    {
+      "type": "QLabel",
+      "text": "kek"
+    },
+    {
+      "type": "QLabel",
+      "text": "lol"
+    }
+  ]
 }

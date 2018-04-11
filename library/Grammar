@@ -17,8 +17,4 @@ DICT := {
 TYPE := widgetType
 LAYOUT := widgetLayout
 TERM := any string
-VAR := MODIFIER + TERM
-MODIFIER := [
-    "*" := setter function
-    ""  := no modifier
-]
+VAR := TERM
