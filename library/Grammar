@@ -7,14 +7,12 @@ WIDGET := {
     &layout := LAYOUT
     # you need to specify \/ if ^ specified and visa versa
     &childWidgets := +WIDGET
-    TERM := VAR
+    TERM := TERM
+    VAR := TERM
 }
-
-DICT := {
-    TERM := VAR # any amount
-    }
 
 TYPE := widgetType
 LAYOUT := widgetLayout
-TERM := any string
-VAR := TERM
+TERM := any json value
+NAME := any string
+VAR := "*" + NAME

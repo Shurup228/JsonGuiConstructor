@@ -1,5 +1,7 @@
+import logging
 import sys
 from json import load
+from typing import Any, Dict
 
 from PyQt5.QtWidgets import QApplication, QWidget
 
@@ -9,7 +11,10 @@ from utils.Tree import Tree
 
 class Interpreter:
     def __init__(self, file_name) -> None:
-        self.__file_name = file_name
+        logging.debug(f"Creating Interpreter with {file_name}")
+
+        self.__file_name: str = file_name
+        self.__context: Dict[str, Any] = {}
 
     def get_tree(self) -> Tree:
         with open(self.__file_name, 'r') as file:
@@ -17,9 +22,11 @@ class Interpreter:
 
             return Tree.create(d)
 
-    def set_attributes(self, widget: QWidget, tree: Tree) -> None:
-        attributes = tree.get_root()
-        print(f"Setting attributes {attributes}")
+    @staticmethod
+    def set_attributes(widget: QWidget, tree: Tree) -> None:
+        attributes = tree.root
+
+        logging.debug(f"Setting attributes {attributes} for widget {widget}")
 
         for attr in attributes.keys():
             method = getattr(widget, "set" + attr[0].upper() + attr[1:])
@@ -30,41 +37,60 @@ class Interpreter:
             else:
                 method(args)
 
-    def set_layout(self, widget: QWidget, tree: Tree):
-        try:
-            layout = layouts[tree.layout](widget)
+    @staticmethod
+    def set_layout(widget: QWidget, tree: Tree) -> None:
+        layout = layouts[tree.layout](widget)
 
-            print(f"Setting layout {layout}")
+        logging.debug(f"Setting layout {layout} for widget {widget}")
 
-            widget.setLayout(layout)
-        except AttributeError:
-            print("Can't set layout")
-            return
+        widget.setLayout(layout)
 
     def add_widgets(self, widget: QWidget, tree: Tree) -> None:
-        print(f"Adding widgets {tree.get_children()}")
+        for child in tree.children:
+            child_widget: QWidget = self.create_widget(child)
 
-        for child_widget in tree.get_children():
-            child_widget: QWidget = self.create_widget(child_widget)
-            print(f"Adding widget {child_widget} to layout {widget.layout()} for {widget}")
+            logging.debug(f"Adding child widget {child_widget} to widget {widget}")
+
             widget.layout().addWidget(child_widget)
 
     def create_widget(self, tree: Tree) -> QWidget:
-        print(f"Creating widget {tree.type}")
         widget = widgets[tree.type]()
-        self.set_layout(widget, tree)
+
+        logging.debug(f"Creating new widget: {tree.type}")
+
+        if tree.has_layout():
+            self.set_layout(widget, tree)
 
         self.set_attributes(widget, tree)
-        self.add_widgets(widget, tree)
+
+        if tree.has_layout() and tree.has_children():
+            self.add_widgets(widget, tree)
+
+        if tree.has_children() and not tree.has_layout():
+            raise AttributeError("Can't add child widgets without layout")
 
         return widget
 
     def run(self) -> None:
+        logging.info("Running interpreter")
+
         tree = self.get_tree()
+
+        logging.info("Starting QApplication")
+
         app = QApplication(sys.argv)
 
+        logging.info("Creating context and root widget")
+
+        self.__context = tree.context
+
         root_widget = self.create_widget(tree)
+
+        logging.info("Showing root widget")
+
         root_widget.show()
+
+        logging.info("Application running")
 
         sys.exit(app.exec_())
 

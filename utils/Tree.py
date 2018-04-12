@@ -1,3 +1,4 @@
+import logging
 from typing import List, Dict, Any
 
 from library.jsonToQt import CHILDREN
@@ -5,17 +6,37 @@ from library.jsonToQt import CHILDREN
 
 class Tree:
     def __init__(self, root=None) -> None:
-        self.__root: Dict = root
+        self.__root: Dict[str, Any] = root
         self.__children: List[Tree] = []
 
-    def get_root(self):
-        return {key: value for (key, value) in self.__root.items() if key not in ["type", "layout"]}
+    @staticmethod
+    def create(root: Dict) -> "Tree":
+        try:
+            children = root.pop(CHILDREN)
+        except KeyError:
+            return Tree(root)
 
-    def get_children(self):
+        logging.debug(f"Creating Tree with root {root} and children {children}")
+
+        result = Tree(root)
+
+        for child in children:
+            result.add_child(Tree.create(child))
+
+        return result
+
+    @property
+    def root(self) -> Dict[str, Any]:
+        return {key: value for (key, value) in self.__root.items()
+                if not key.startswith("*") and key not in ["type", "layout"]}
+
+    @property
+    def children(self) -> List["Tree"]:
         return self.__children
 
-    def add_child(self, child) -> None:
-        self.__children.append(child)
+    @property
+    def context(self) -> Dict[str, Any]:
+        return {key[1:]: value for (key, value) in self.__root.items() if key.startswith("*")}
 
     def __getattribute__(self, name: str) -> Any:
         root = super().__getattribute__("_Tree__root")
@@ -24,17 +45,11 @@ class Tree:
         except KeyError:
             return super().__getattribute__(name)
 
-    @staticmethod
-    def create(dict_: Dict):
-        root = dict_.copy()
-        try:
-            root.pop(CHILDREN)
-        except KeyError:
-            return Tree(root)
+    def add_child(self, child) -> None:
+        self.__children.append(child)
 
-        result = Tree(root)
+    def has_layout(self) -> bool:
+        return "layout" in self.__root
 
-        for child in dict_[CHILDREN]:
-            result.add_child(Tree.create(child))
-
-        return result
+    def has_children(self) -> bool:
+        return self.__children != []
