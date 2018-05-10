@@ -1,9 +1,8 @@
 import logging
-import sys
 from json import load
 from typing import Any, Dict
 
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QWidget
 
 from library.jsonToQt import widgets, layouts
 from utils.Tree import Tree
@@ -71,14 +70,10 @@ class Interpreter:
 
         return widget
 
-    def run(self) -> None:
+    def run(self) -> QWidget:
         logging.info("Running interpreter")
 
         tree = self.get_tree()
-
-        logging.info("Starting QApplication")
-
-        app = QApplication(sys.argv)
 
         logging.info("Creating context and root widget")
 
@@ -86,11 +81,5 @@ class Interpreter:
 
         root_widget = self.create_widget(tree)
 
-        logging.info("Showing root widget")
-
-        root_widget.show()
-
-        logging.info("Application running")
-
-        sys.exit(app.exec_())
+        return root_widget
 

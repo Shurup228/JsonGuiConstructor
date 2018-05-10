@@ -2,7 +2,6 @@
   "type": "QWidget",
   "layout": "QHBoxLayout",
   "windowTitle": "kek",
-  "fixedSize": [500, 600],
   "children": [
     {
       "type": "QLabel",
@@ -11,6 +10,10 @@
     {
       "type": "QLabel",
       "text": "lol"
+    },
+    {
+      "type": "QPushButton",
+    "text": "cheburek"
     }
   ]
 }
